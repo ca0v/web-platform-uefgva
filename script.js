@@ -1,7 +1,8 @@
 const input = document.querySelector('#input');
 const run = document.querySelector('#run');
 
-const unwanted = ['GeneratedUniqueId'];
+const unwantedKeys = ['GeneratedUniqueId', 'gisKeyName'];
+const unwantedValues = [0, false, null];
 
 run.addEventListener('click', () => {
   const value = input.value;
@@ -21,26 +22,19 @@ function strip(parent, key) {
   if (key) {
     const child = parent[key];
     console.log('strip', key, typeof child, child);
-    if (0 <= unwanted.indexOf(key)) {
+    if (0 <= unwantedKeys.indexOf(key)) {
+      console.log('delete', key);
+      delete parent[key];
+      return;
+    }
+    if (0 <= unwantedValues.indexOf(child)) {
       console.log('delete', key);
       delete parent[key];
       return;
     }
     switch (typeof child) {
-      case 'number':
-        if (child === 0) {
-          delete parent[key];
-        }
-        break;
       case 'object':
-        if (child === null) {
-          delete parent[key];
-        } else {
-          Object.entries(child).forEach(([key, value]) => strip(child, key));
-        }
-        break;
-      case 'undefined':
-        //delete parent[key];
+        Object.entries(child).forEach(([key, value]) => strip(child, key));
         break;
     }
   } else {
