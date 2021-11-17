@@ -21,7 +21,7 @@ function strip(parent, key) {
   if (key) {
     const child = parent[key];
     console.log('strip', key, typeof child, child);
-    if (unwanted.find(key)) {
+    if (0 <= unwanted.indexOf(key)) {
       console.log('delete', key);
       delete parent[key];
       return;
